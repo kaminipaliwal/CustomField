@@ -17,14 +17,16 @@ exports.addCustomField = async (requestContent = {},res) => {
     let responseData = await axios
                 .post("https://rest.gohighlevel.com/v1/custom-fields/", labeldata, {headers: headers})
                 .then(async(response)=> {
-                       
+                       console.log("response.data.id",response.data.id);
+                        let outp = response.data.id
                         let customFieldReq = {
-                            customField: `{ ${response.data.id} : "Test" }`
+                            customField: { [outp] :  "Test" }
                         }
-            
+                         console.log("customFieldReq",customFieldReq,requestContent['contactid']);
                         let data = await axios
                                 .put("https://rest.gohighlevel.com/v1/contacts/" + requestContent['contactid'], customFieldReq, {headers: headers})
                                 .then((responseFinal)=> { 
+                                    console.log("responseFinal",responseFinal.data);
                                     let customFieldRes = {
                                             message: "Custom field updated to Contact",
                                             data: responseFinal.data
